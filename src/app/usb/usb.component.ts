@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { UsbService } from './usb.service';
+import { UsbEventResult } from './usb-event-result';
+import { from } from 'rxjs';
 
-declare var cordova: any;
 
 @Component({
   selector: 'app-usb',
@@ -9,21 +11,21 @@ declare var cordova: any;
 })
 export class UsbComponent implements OnInit {
 
-  constructor() { }
+  constructor(private usbService: UsbService) { }
 
   ngOnInit() {
-  }
-
-  click(): void {
-    cordova.plugins.usbevent.registerEventCallback(
-      'test...',
-      (result: string) => {
+    this.usbService.usbEvent$.subscribe(
+      (result: UsbEventResult) => {
         console.log(result);
-      },
-      (error: any) => {
-        console.log(error);
+      }, (error: any) => {
+        console.error(error);
       }
     );
   }
 
+  click(): void {
+    from(this.usbService.registerEventCallback()).subscribe(
+      (result: UsbEventResult) => console.log(result),
+      (error: any) => console.error(error));
+  }
 }

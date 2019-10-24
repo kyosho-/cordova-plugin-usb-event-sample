@@ -8,8 +8,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "add-plugin": "npx cordova plugin add plugins_src/cordova-plugin-usb-event",
-    "remove-plugin": "npx cordova plugin remove cordova-plugin-usb-event"
+    "plugin:add": "npx cordova plugin add plugins_src/cordova-plugin-usb-event",
+    "plugin:remove": "npx cordova plugin remove cordova-plugin-usb-event",
+    "plugin:reverse": "cpx ./platforms/android/app/src/main/java/net/kyosho/usb/event/*.java ./plugins_src/cordova-plugin-usb-event/src/android"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +39,7 @@
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
     "cordova-plugin-whitelist": "^1.3.4",
+    "cpx": "^1.5.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
