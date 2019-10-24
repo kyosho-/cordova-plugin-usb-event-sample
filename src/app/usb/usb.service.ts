@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { UsbEventResult } from './usb-event-result';
 import { UsbEventId } from './usb-event-id.enum';
+import { UsbListResult } from './usb-list-result';
 
 declare var cordova: any;
 
@@ -17,6 +18,16 @@ export class UsbService {
 
   constructor() { }
 
+  listDevices(): Promise<UsbListResult> {
+    return new Promise<UsbListResult>((resolve, reject) => {
+      cordova.plugins.usbevent.listDevices(
+        (list: UsbListResult) => resolve(list),
+        (error: string) => reject(error));
+    }).catch((error: any) => {
+      throw new Error(error);
+    });
+  }
+
   registerEventCallback(): Promise<UsbEventResult> {
     return new Promise<UsbEventResult>((resolve, reject) => {
       cordova.plugins.usbevent.registerEventCallback(
@@ -25,7 +36,7 @@ export class UsbService {
             reject(`Invalid event. (event=${JSON.stringify(event)})`);
           }
 
-          switch (event.event) {
+          switch (event.id) {
             case UsbEventId.Registered:
               resolve(event);
               break;
