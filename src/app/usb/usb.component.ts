@@ -30,8 +30,20 @@ export class UsbComponent implements OnInit {
       (error: any) => console.error(error));
   }
 
+  existsRegisteredCallback(): void {
+    from(this.usbService.existsRegisteredCallback()).subscribe(
+      (result: boolean) => console.log(result),
+      (error: any) => console.error(error));
+  }
+
   registerCallback(): void {
     from(this.usbService.registerEventCallback()).subscribe(
+      (result: UsbResult) => console.log(result),
+      (error: any) => console.error(error));
+  }
+
+  unregisterCallback(): void {
+    from(this.usbService.unregisterEventCallback()).subscribe(
       (result: UsbResult) => console.log(result),
       (error: any) => console.error(error));
   }

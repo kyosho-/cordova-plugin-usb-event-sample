@@ -28,6 +28,16 @@ export class UsbService {
     });
   }
 
+  existsRegisteredCallback(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      cordova.plugins.usbevent.existsRegisteredCallback(
+        (exists: boolean) => resolve(exists),
+        (error: any) => reject(error));
+    }).catch((error: any) => {
+      throw new Error(error);
+    });
+  }
+
   registerEventCallback(): Promise<UsbResult> {
     return new Promise<UsbResult>((resolve, reject) => {
       cordova.plugins.usbevent.registerEventCallback(
@@ -43,6 +53,28 @@ export class UsbService {
             case UsbEventId.Attached:
             case UsbEventId.Detached:
               this.usbEventSubject.next(result);
+              break;
+            default:
+              reject(`Unsupported event. (event=${JSON.stringify(result)})`);
+          }
+        },
+        (error: string) => reject(error));
+    }).catch((error: any) => {
+      throw new Error(error);
+    });
+  }
+
+  unregisterEventCallback(): Promise<UsbResult> {
+    return new Promise<UsbResult>((resolve, reject) => {
+      cordova.plugins.usbevent.unregisterEventCallback(
+        (result: UsbResult) => {
+          if (typeof result !== 'object') {
+            reject(`Invalid event. (event=${JSON.stringify(result)})`);
+          }
+
+          switch (result.id) {
+            case UsbEventId.Unregistered:
+              resolve(result);
               break;
             default:
               reject(`Unsupported event. (event=${JSON.stringify(result)})`);
