@@ -28,16 +28,6 @@ export class UsbService {
     });
   }
 
-  existsRegisteredCallback(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      cordova.plugins.usbevent.existsRegisteredCallback(
-        (exists: boolean) => resolve(exists),
-        (error: any) => reject(error));
-    }).catch((error: any) => {
-      throw new Error(error);
-    });
-  }
-
   registerEventCallback(): Promise<UsbResult> {
     return new Promise<UsbResult>((resolve, reject) => {
       cordova.plugins.usbevent.registerEventCallback(
@@ -81,6 +71,16 @@ export class UsbService {
           }
         },
         (error: string) => reject(error));
+    }).catch((error: any) => {
+      throw new Error(error);
+    });
+  }
+
+  existsRegisteredCallback(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      cordova.plugins.usbevent.existsRegisteredCallback(
+        (exists: boolean) => resolve(exists),
+        (error: any) => reject(error));
     }).catch((error: any) => {
       throw new Error(error);
     });
