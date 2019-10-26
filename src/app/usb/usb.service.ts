@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { UsbEventResult } from './usb-event-result';
+
 import { UsbEventId } from './usb-event-id.enum';
-import { UsbListResult } from './usb-list-result';
+import { UsbResult } from './usb-result';
 
 declare var cordova: any;
 
@@ -11,41 +11,41 @@ declare var cordova: any;
 })
 export class UsbService {
 
-  private usbEventSubject: Subject<UsbEventResult> =
-    new Subject<UsbEventResult>();
-  usbEvent$: Observable<UsbEventResult> =
+  private usbEventSubject: Subject<UsbResult> =
+    new Subject<UsbResult>();
+  usbEvent$: Observable<UsbResult> =
     this.usbEventSubject.asObservable();
 
   constructor() { }
 
-  listDevices(): Promise<UsbListResult> {
-    return new Promise<UsbListResult>((resolve, reject) => {
+  listDevices(): Promise<UsbResult> {
+    return new Promise<UsbResult>((resolve, reject) => {
       cordova.plugins.usbevent.listDevices(
-        (list: UsbListResult) => resolve(list),
+        (result: UsbResult) => resolve(result),
         (error: string) => reject(error));
     }).catch((error: any) => {
       throw new Error(error);
     });
   }
 
-  registerEventCallback(): Promise<UsbEventResult> {
-    return new Promise<UsbEventResult>((resolve, reject) => {
+  registerEventCallback(): Promise<UsbResult> {
+    return new Promise<UsbResult>((resolve, reject) => {
       cordova.plugins.usbevent.registerEventCallback(
-        (event: UsbEventResult) => {
-          if (typeof event !== 'object') {
-            reject(`Invalid event. (event=${JSON.stringify(event)})`);
+        (result: UsbResult) => {
+          if (typeof result !== 'object') {
+            reject(`Invalid event. (event=${JSON.stringify(result)})`);
           }
 
-          switch (event.id) {
+          switch (result.id) {
             case UsbEventId.Registered:
-              resolve(event);
+              resolve(result);
               break;
             case UsbEventId.Attached:
             case UsbEventId.Detached:
-              this.usbEventSubject.next(event);
+              this.usbEventSubject.next(result);
               break;
             default:
-              reject(`Unsupported event. (event=${JSON.stringify(event)})`);
+              reject(`Unsupported event. (event=${JSON.stringify(result)})`);
           }
         },
         (error: string) => reject(error));

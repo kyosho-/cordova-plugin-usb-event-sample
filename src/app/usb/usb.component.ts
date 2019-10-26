@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UsbService } from './usb.service';
-import { UsbEventResult } from './usb-event-result';
 import { from } from 'rxjs';
-import { UsbListResult } from './usb-list-result';
+
+import { UsbService } from './usb.service';
+import { UsbResult } from './usb-result';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class UsbComponent implements OnInit {
 
   ngOnInit() {
     this.usbService.usbEvent$.subscribe(
-      (result: UsbEventResult) => {
+      (result: UsbResult) => {
         console.log(result);
       }, (error: any) => {
         console.error(error);
@@ -26,13 +26,13 @@ export class UsbComponent implements OnInit {
 
   list(): void {
     from(this.usbService.listDevices()).subscribe(
-      (list: UsbListResult) => console.log(list),
+      (result: UsbResult) => console.log(result),
       (error: any) => console.error(error));
   }
 
   registerCallback(): void {
     from(this.usbService.registerEventCallback()).subscribe(
-      (result: UsbEventResult) => console.log(result),
+      (result: UsbResult) => console.log(result),
       (error: any) => console.error(error));
   }
 }
