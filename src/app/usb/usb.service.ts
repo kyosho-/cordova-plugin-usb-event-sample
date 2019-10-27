@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 
 import { UsbEventId } from './usb-event-id.enum';
-import { UsbResult } from './usb-result';
+import { UsbModel } from './usb-model';
 
 declare var cordova: any;
 
@@ -11,27 +11,27 @@ declare var cordova: any;
 })
 export class UsbService {
 
-  private usbEventSubject: Subject<UsbResult> =
-    new Subject<UsbResult>();
-  usbEvent$: Observable<UsbResult> =
+  private usbEventSubject: Subject<UsbModel> =
+    new Subject<UsbModel>();
+  usbEvent$: Observable<UsbModel> =
     this.usbEventSubject.asObservable();
 
   constructor() { }
 
-  listDevices(): Promise<UsbResult> {
-    return new Promise<UsbResult>((resolve, reject) => {
+  listDevices(filter?: UsbModel): Promise<UsbModel> {
+    return new Promise<UsbModel>((resolve, reject) => {
       cordova.plugins.usbevent.listDevices(
-        (result: UsbResult) => resolve(result),
+        (result: UsbModel) => resolve(result),
         (error: string) => reject(error));
     }).catch((error: any) => {
       throw new Error(error);
     });
   }
 
-  registerEventCallback(): Promise<UsbResult> {
-    return new Promise<UsbResult>((resolve, reject) => {
+  registerEventCallback(filter?: UsbModel): Promise<UsbModel> {
+    return new Promise<UsbModel>((resolve, reject) => {
       cordova.plugins.usbevent.registerEventCallback(
-        (result: UsbResult) => {
+        (result: UsbModel) => {
           if (typeof result !== 'object') {
             reject(`Invalid event. (event=${JSON.stringify(result)})`);
           }
@@ -54,10 +54,10 @@ export class UsbService {
     });
   }
 
-  unregisterEventCallback(): Promise<UsbResult> {
-    return new Promise<UsbResult>((resolve, reject) => {
+  unregisterEventCallback(): Promise<UsbModel> {
+    return new Promise<UsbModel>((resolve, reject) => {
       cordova.plugins.usbevent.unregisterEventCallback(
-        (result: UsbResult) => {
+        (result: UsbModel) => {
           if (typeof result !== 'object') {
             reject(`Invalid event. (event=${JSON.stringify(result)})`);
           }

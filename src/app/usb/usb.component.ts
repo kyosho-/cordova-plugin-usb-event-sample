@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { from } from 'rxjs';
 
 import { UsbService } from './usb.service';
-import { UsbResult } from './usb-result';
+import { UsbModel } from './usb-model';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class UsbComponent implements OnInit {
 
   ngOnInit() {
     this.usbService.usbEvent$.subscribe(
-      (result: UsbResult) => {
+      (result: UsbModel) => {
         console.log(result);
       }, (error: any) => {
         console.error(error);
@@ -26,7 +26,7 @@ export class UsbComponent implements OnInit {
 
   list(): void {
     from(this.usbService.listDevices()).subscribe(
-      (result: UsbResult) => console.log(result),
+      (result: UsbModel) => console.log(result),
       (error: any) => console.error(error));
   }
 
@@ -38,13 +38,13 @@ export class UsbComponent implements OnInit {
 
   registerCallback(): void {
     from(this.usbService.registerEventCallback()).subscribe(
-      (result: UsbResult) => console.log(result),
+      (result: UsbModel) => console.log(result),
       (error: any) => console.error(error));
   }
 
   unregisterCallback(): void {
     from(this.usbService.unregisterEventCallback()).subscribe(
-      (result: UsbResult) => console.log(result),
+      (result: UsbModel) => console.log(result),
       (error: any) => console.error(error));
   }
 }

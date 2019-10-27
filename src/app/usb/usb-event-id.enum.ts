@@ -3,5 +3,6 @@ export enum UsbEventId {
     Registered = 'callbackRegistered',
     Unregistered = 'callbackUnregistered',
     Attached = 'attached',
-    Detached = 'detached'
+    Detached = 'detached',
+    Include = 'include'
 }
