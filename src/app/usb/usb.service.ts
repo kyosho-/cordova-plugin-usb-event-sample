@@ -22,7 +22,8 @@ export class UsbService {
     return new Promise<UsbModel>((resolve, reject) => {
       cordova.plugins.usbevent.listDevices(
         (result: UsbModel) => resolve(result),
-        (error: string) => reject(error));
+        (error: string) => reject(error),
+        filter);
     }).catch((error: any) => {
       throw new Error(error);
     });
@@ -48,7 +49,8 @@ export class UsbService {
               reject(`Unsupported event. (event=${JSON.stringify(result)})`);
           }
         },
-        (error: string) => reject(error));
+        (error: string) => reject(error),
+        filter);
     }).catch((error: any) => {
       throw new Error(error);
     });
