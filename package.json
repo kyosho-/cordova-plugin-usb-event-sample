@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "link:dos": "mklink /D plugins_src\\cordova-plugin-usb-event ..\\..\\cordova-plugin-usb-event",
+    "link:mac": "ln -s ../../cordova-plugin-usb-event plugins_src/cordova-plugin-usb-event",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --baseHref=./",
